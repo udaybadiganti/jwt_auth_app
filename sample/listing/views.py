@@ -7,7 +7,6 @@ from listing.models import Listing
 
 
 class ManagingListView(APIView):
-'''
 	def get(self, request, format=None):
 		try:
 			user = request.user
@@ -24,7 +23,7 @@ class ManagingListView(APIView):
 
 		except:
 			return Response({'error': 'something went wrong while registering.'},status = status.HTTP_500_INTERNAL_SERVER_ERROR)
-'''
+			
 	def post(self, request):
 		try:
 			print("ok3")
