@@ -4,26 +4,38 @@ from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from listing.models import Listing
+from listing.serializers import ManageListSerializer
 
 
 class ManagingListView(APIView):
+
 	def get(self, request, format=None):
 		try:
 			user = request.user
 			if not user.is_owner:
 				return Response({'error': 'User does not have permission to retrive'},status = status.HTTP_403_FORBIDDEN)
 
-			slug  = request.query_params.get(slug)
+			slug  = request.query_params.get('slug')
 
 			if not slug:
 				listing = Listing.objects.order_by('-created_date').filter(owner = user.email)
-
 				listing = ManageListSerializer(listing, many = True)
 				return Response({'listing': listing.data}, status = status.HTTP_200_OK)
 
+			if not Listing.objects.filter(owner = user.email, slug = slug).exists():
+				return Response({'error': 'Listing not available.'}, status = status.HTTP_404_NOT_FOUND)
+			
+			listing = Listing.objects.filter(owner = user.email, slug = slug)
+			listing = ManageListSerializer(listing, many = True)
+			print("udays")
+			print(listing.data)
+
+			return Response({'listing': listing.data}, status = status.HTTP_200_OK)
+
+
 		except:
 			return Response({'error': 'something went wrong while registering.'},status = status.HTTP_500_INTERNAL_SERVER_ERROR)
-			
+		
 	def post(self, request):
 		try:
 			print("ok3")
@@ -43,6 +55,7 @@ class ManagingListView(APIView):
 				return Response({'error': 'Listing with this slug is already exists'}, status = status.HTTP_400_BAD_REQUEST)
 			print("ok1")
 			Listing.objects.create(
+				owner = user.email,
 				category = category,
 				item_name = item_name,
 				slug = slug
@@ -52,3 +65,11 @@ class ManagingListView(APIView):
 
 		except:
 			return Response({'error': 'Something went wrong when creating list..'}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+	def put(self, request):
+
+		pass
+
+
+	def patch(self, request):
+		pass
