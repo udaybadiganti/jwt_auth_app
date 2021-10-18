@@ -4,6 +4,7 @@ from django.utils.timezone import now
 # Create your models here.
 
 class Listing(models.Model):
+	#owner = models.EmailField(max_length = 255, null = True)
 	category = models.CharField(max_length = 255)
 	item_name = models.CharField(max_length = 255)
 	slug = models.SlugField(unique = True)

@@ -10,10 +10,7 @@ class UserAccountManager(BaseUserManager):
         #uday@Gmail.com --> uday@gmai.com
         email = email.lower()
 
-        user = self.model(
-            email = email,
-            name = name
-            )
+        user = self.model(email = email, name = name)
         user.set_password(password)
         user.save(using = self._db)
 

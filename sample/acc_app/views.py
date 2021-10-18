@@ -32,18 +32,21 @@ class RegisterView(APIView):
 			if password == re_password:
 				if len(password) >= 8:
 					print("im ok")
-					print(not User.objects.filter(email=email).exists())
+					#print(not User.objects.filter(email=email).exists())
 
 					if not User.objects.filter(email=email).exists():
+						
 						if not is_owner:
-							print("it's fine3")
-							User.objects.create_user(email= email, name=name, password=password)
+							print("it's fine5")
+							User.objects.create_user(email= email, name= name, password= password)
 							print("it's fine4")
 							return Response({'success': 'user successfully created'}, status = status.HTTP_201_CREATED)
 
 						else:
-							User.objects.create_owner(email = email, name=name, password=password)
-							#print("it's fine")
+							print("it's fine3")
+							print(User.objects.all())
+							print(User.objects.create_owner(email = email, name= name, password= password))	
+							print("it's fine")
 							return Response({'success': 'Owner successfully created'}, status = status.HTTP_201_CREATED)
 					else:
 						print("uday")
